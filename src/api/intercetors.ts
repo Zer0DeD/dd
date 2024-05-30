@@ -1,15 +1,15 @@
 import axios, { type CreateAxiosDefaults } from 'axios';
 const https = require('https');
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const options: CreateAxiosDefaults = {
-  baseURL: 'https://188.226.94.79',
+  baseURL: 'http://188.226.94.79:443',
   headers: {
     'Content-Type': 'application/json',
   },
-  // httpsAgent: new https.Agent({
-  //   rejectUnauthorized: false,
-  // }),
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false,
+  }),
 };
 
 const axiosClassic = axios.create(options);
