@@ -1,7 +1,7 @@
 import axios, { type CreateAxiosDefaults } from 'axios';
 
 const options: CreateAxiosDefaults = {
-  baseURL: 'http://188.226.94.79:8000',
+  baseURL: 'https://188.226.94.79:8000',
   headers: {
     'Content-Type': 'application/json',
   },
