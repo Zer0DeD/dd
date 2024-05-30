@@ -15,7 +15,7 @@ export default function Home() {
   const [message, setMessage] = useState<string | null>(null);
 
   const handleMessage = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    // event.preventDefault();
+    event.preventDefault();
     try {
       const res = await axiosClassic.get('/', {
         headers: {
