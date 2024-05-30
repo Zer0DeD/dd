@@ -2,7 +2,7 @@
 
 import axiosClassic from '@/api/intercetors';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -11,6 +11,24 @@ export default function Home() {
     message: string;
     imageUrl: string;
   } | null>(null);
+
+  const [message, setMessage] = useState<string | null>(null);
+
+  const handleMessage = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // event.preventDefault();
+    try {
+      const res = await axiosClassic.get('/');
+      if (!res.data) {
+        console.log('no data');
+      }
+
+      const data = res.data;
+      console.log(data);
+      setMessage(data.message);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -65,6 +83,10 @@ export default function Home() {
           </div>
         )}
         <button type="submit">Загрузить</button>
+        <div>
+          <button onClick={handleMessage}>send test request</button>
+          {message && <h2>{message}</h2>}
+        </div>
       </form>
       {response && (
         <div>
