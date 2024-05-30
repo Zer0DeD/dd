@@ -17,7 +17,11 @@ export default function Home() {
   const handleMessage = async (event: React.MouseEvent<HTMLButtonElement>) => {
     // event.preventDefault();
     try {
-      const res = await axiosClassic.get('/');
+      const res = await axiosClassic.get('/', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       if (!res.data) {
         console.log('no data');
       }
