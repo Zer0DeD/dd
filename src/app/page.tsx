@@ -34,8 +34,7 @@ export default function Home() {
     formData.append('file', file);
 
     try {
-      // TODO: поменять путь для нейронки
-      const res = await axiosClassic.post('/api/upload', formData, {
+      const res = await axiosClassic.post('/ai', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -53,14 +52,13 @@ export default function Home() {
     }
   };
 
+  // style={{
+  //   padding: 10,
+  //   margin: 10,
+  //   display: 'flex',
+  // }}
   return (
-    <div
-    // style={{
-    //   padding: 10,
-    //   margin: 10,
-    //   display: 'flex',
-    // }}
-    >
+    <div>
       <form onSubmit={handleSubmit}>
         <Input
           type="file"
