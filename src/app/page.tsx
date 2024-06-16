@@ -46,6 +46,7 @@ export default function Home() {
       console.error('Ошибка загрузки файла, повторите попытку позже:', error);
       setResponse({
         error: true,
+        // message: 'Ого, это же Кирюха!!!',
         message: 'Ошибка загрузки файла, повторите попытку позже',
         imageUrl: '',
       });
@@ -54,11 +55,11 @@ export default function Home() {
 
   return (
     <div
-      style={{
-        padding: 10,
-        margin: 10,
-        display: 'flex',
-      }}
+    // style={{
+    //   padding: 10,
+    //   margin: 10,
+    //   display: 'flex',
+    // }}
     >
       <form onSubmit={handleSubmit}>
         <Input
@@ -69,7 +70,8 @@ export default function Home() {
 
         <div style={{ display: 'flex', alignContent: 'center' }}>
           {preview && (
-            <div style={{ padding: 10, margin: 10 }}>
+            <div>
+              {/* <div style={{ padding: 10, margin: 10 }}> */}
               <Typography.Title level={3}>Превью файла:</Typography.Title>
               <Image
                 src={preview}
