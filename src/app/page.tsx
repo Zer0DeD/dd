@@ -5,8 +5,11 @@ import axiosClassic from '../api/intercetors';
 
 import { Button, Input, Typography, Image } from 'antd';
 
+import DDHeader from '@/components/Header';
+
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [response, setResponse] = useState<{
     error: boolean;
@@ -37,6 +40,7 @@ export default function Home() {
     formData.append('file', file);
 
     try {
+      setLoading(true);
       console.log('file sended');
       const res = await axiosClassic.post('/ai', formData, {
         headers: {
@@ -55,19 +59,33 @@ export default function Home() {
         message: 'success',
         imageUrl: imageUrl,
       });
+      setLoading(false);
     } catch (error) {
       console.error('Ошибка загрузки файла, повторите попытку позже:', error);
       setResponse({
         error: true,
-        message: 'Ошибка загрузки файла, повторите попытку позже',
-        imageUrl: '',
+        message: 'Ошибка, повторите попытку позже',
+        imageUrl:
+          'data:image/jpeg;base64,iVBORw0KGg0AAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD///+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+GgAWKgaG4G4AJkQgH5ZoBQEAEJAAWv/AYWv+AaWv+wAFbWg+wICAgACAg4AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC',
       });
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <DDHeader />
+      <Typography.Title
+        level={2}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        WEB-приложение для анализа изображений с применением нейронных сетей
+      </Typography.Title>
+      <form onSubmit={handleSubmit} style={{ margin: 20 }}>
         <Input
           type="file"
           accept="image/tif"
@@ -79,7 +97,7 @@ export default function Home() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '8',
+            gap: 10,
           }}
         >
           {preview && (
@@ -91,6 +109,8 @@ export default function Home() {
                 style={{
                   maxWidth: '500px',
                   maxHeight: '500px',
+                  minWidth: '300px',
+                  minHeight: '300px',
                   margin: '0 auto',
                 }}
               />
@@ -98,46 +118,72 @@ export default function Home() {
           )}
           {response && (
             <span>
-              {/* <Typography.Paragraph>{response.message}</Typography.Paragraph> */}
-              <Typography.Title level={3}>
-                Результат работы программы:
-              </Typography.Title>
-              {response.imageUrl && (
-                <Image
-                  src={response.imageUrl}
-                  alt="Полученное"
-                  style={{
-                    maxWidth: '500px',
-                    maxHeight: '500px',
-                    margin: '0 auto',
-                  }}
-                />
+              {response.error ? (
+                <>
+                  <Typography.Title level={3}>
+                    {response.message}
+                  </Typography.Title>
+                  <div style={{ width: '500px', height: '500px' }}></div>
+                </>
+              ) : (
+                <>
+                  <Typography.Title level={3}>
+                    Результат работы программы:
+                  </Typography.Title>
+                  <Image
+                    src={response.imageUrl}
+                    alt="Полученное"
+                    style={{
+                      maxWidth: '500px',
+                      maxHeight: '500px',
+                      minWidth: '300px',
+                      minHeight: '300px',
+                      margin: '0 auto',
+                    }}
+                  />
+                </>
               )}
             </span>
           )}
         </div>
-        {!response && (
-          <Button disabled={preview === null} type="primary" htmlType="submit">
-            Загрузить
-          </Button>
-        )}
-        {response && (
-          <Button
-            type="primary"
-            onClick={() => {
-              setFile(null);
-              setPreview(null);
-              setResponse(null);
-            }}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            Сбросить
-          </Button>
-        )}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            margin: 10,
+            padding: 10,
+          }}
+        >
+          {!response && (
+            <Button
+              disabled={preview === null}
+              type="primary"
+              htmlType="submit"
+            >
+              Загрузить
+            </Button>
+          )}
+          {loading && <span> loading...</span>}
+          {response && (
+            <Button
+              type="primary"
+              onClick={() => {
+                setFile(null);
+                setPreview(null);
+                setResponse(null);
+              }}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              Сбросить
+            </Button>
+          )}
+        </div>
       </form>
     </>
   );
