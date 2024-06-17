@@ -6,6 +6,7 @@ const options: CreateAxiosDefaults = {
   baseURL: 'http://188.226.94.79:443',
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
   },
   httpsAgent: new https.Agent({
     rejectUnauthorized: false,
